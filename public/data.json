@@ -91,32 +91,6 @@
       ]
     },
     {
-      "email": "student2@example.com",
-      "password": "password",
-      "role": "Student",
-      "first_name": "Hannah",
-      "last_name": "Anderson",
-      "year": "Grade 4",
-      "parent": "parent5@example.com",
-      "subjects": [
-        {
-          "title": "Art",
-          "teacher": "teacher3@example.com",
-          "grade": "D"
-        },
-        {
-          "title": "Science",
-          "teacher": "teacher3@example.com",
-          "grade": "D"
-        },
-        {
-          "title": "Physical Education",
-          "teacher": "teacher3@example.com",
-          "grade": "N/A"
-        }
-      ]
-    },
-    {
       "email": "student3@example.com",
       "password": "password",
       "role": "Student",
@@ -138,32 +112,6 @@
       ]
     },
     {
-      "email": "student4@example.com",
-      "password": "password",
-      "role": "Student",
-      "first_name": "Diana",
-      "last_name": "Thomas",
-      "year": "Grade 1",
-      "parent": "parent4@example.com",
-      "subjects": [
-        {
-          "title": "English",
-          "teacher": "teacher4@example.com",
-          "grade": "A"
-        },
-        {
-          "title": "Mathematics",
-          "teacher": "teacher5@example.com",
-          "grade": "B"
-        },
-        {
-          "title": "Physical Education",
-          "teacher": "teacher3@example.com",
-          "grade": "N/A"
-        }
-      ]
-    },
-    {
       "email": "student5@example.com",
       "password": "password",
       "role": "Student",
@@ -181,6 +129,11 @@
           "title": "Art",
           "teacher": "teacher4@example.com",
           "grade": "A"
+        },
+        {
+          "title": "History",
+          "teacher": "teacher1@example.com",
+          "grade": "N/A"
         }
       ]
     },
@@ -204,6 +157,15 @@
         "student10@example.com",
         "student4@example.com"
       ]
+    },
+    {
+      "email": "nadunbalasuriya03@gmail.com",
+      "role": "Student",
+      "first_name": "Nadun ",
+      "last_name": "Balasuriya",
+      "year": "Year 1",
+      "parent": "parent2@example.com",
+      "subjects": []
     }
   ],
   "subjects": [
