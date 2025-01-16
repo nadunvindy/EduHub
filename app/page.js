@@ -1,5 +1,4 @@
 'use client';
-
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -31,6 +30,7 @@ export default function Page() {
   };
 
   return (
+ 
     <div className="flex items-center justify-center">
       <div className="w-full max-w-md bg-white shadow-md rounded-lg p-6">
         <h1 className="text-2xl font-bold mb-4">Login</h1>
