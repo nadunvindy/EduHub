@@ -3,6 +3,7 @@ import Header from "../app/components/header";
 import Footer from "../app/components/footer";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { GoogleTagManager } from "@next/third-parties/google";
 
 export default function ParentDashboard() {
   const [parent, setParent] = useState(null);
