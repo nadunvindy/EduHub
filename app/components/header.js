@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+
 export default function Header() {
   return (
     <div className="flex p-6 content-center justify-between bg-primary text-white">
