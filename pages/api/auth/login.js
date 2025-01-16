@@ -6,15 +6,18 @@ export default function handler(req, res) {
     const { email, password } = req.body;
 
     const filePath = path.join(process.cwd(), 'public', 'data.json');
-    const fileData = fs.readFileSync(filePath);
+    const fileData = fs.readFileSync(filePath, 'utf8');
     const data = JSON.parse(fileData);
 
+    // Find the user by email and password
     const user = data.users.find(u => u.email === email && u.password === password);
-    if (!user) return res.status(401).json({ message: 'Invalid email or password' });
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
 
-    const token = JSON.stringify({ email: user.email, role: user.role, name: user.name });
-    res.status(200).json({ token });
+    // Send the full user object as the token
+    return res.status(200).json({ token: JSON.stringify(user) });
   } else {
-    res.status(405).json({ message: 'Method Not Allowed' });
+    return res.status(405).json({ message: 'Method Not Allowed' });
   }
 }
