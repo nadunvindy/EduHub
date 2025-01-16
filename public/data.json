@@ -1,36 +1,243 @@
 {
-    "users": [
-      {
-        "email": "principal@example.com",
-        "password": "password",
-        "role": "Principal",
-        "name": "John Principal",
-        "address": "123 School Ave"
-      },
-      {
-        "email": "teacher@example.com",
-        "password": "password",
-        "role": "Teacher",
-        "name": "Jane Teacher",
-        "subjects": ["Math", "Science"]
-      },
-      {
-        "email": "student@example.com",
-        "password": "password",
-        "role": "Student",
-        "name": "Student One",
-        "year": "Grade 5",
-        "parent": "Parent One",
-        "subjects": ["Math", "English"],
-        "grades": { "Math": "A", "English": "B" }
-      },
-      {
-        "email": "parent@example.com",
-        "password": "password",
-        "role": "Parent",
-        "name": "Parent One",
-        "children": ["student@example.com"]
-      }
-    ]
-  }
-  
+  "users": [
+    {
+      "email": "principal1@example.com",
+      "password": "password",
+      "role": "Principal",
+      "first_name": "Charlie",
+      "last_name": "Jackson"
+    },
+    {
+      "email": "principal2@example.com",
+      "password": "password",
+      "role": "Principal",
+      "first_name": "George",
+      "last_name": "White"
+    },
+    {
+      "email": "teacher1@example.com",
+      "password": "password",
+      "role": "Teacher",
+      "first_name": "Julia",
+      "last_name": "Smith",
+      "subjects": [
+        "History"
+      ]
+    },
+    {
+      "email": "teacher2@example.com",
+      "password": "password",
+      "role": "Teacher",
+      "first_name": "Alice",
+      "last_name": "Taylor",
+      "subjects": [
+        "Physical Education"
+      ]
+    },
+    {
+      "email": "teacher3@example.com",
+      "password": "password",
+      "role": "Teacher",
+      "first_name": "Hannah",
+      "last_name": "Jackson",
+      "subjects": [
+        "Physical Education"
+      ]
+    },
+    {
+      "email": "teacher4@example.com",
+      "password": "password",
+      "role": "Teacher",
+      "first_name": "Julia",
+      "last_name": "White",
+      "subjects": [
+        "Geography"
+      ]
+    },
+    {
+      "email": "teacher5@example.com",
+      "password": "password",
+      "role": "Teacher",
+      "first_name": "Diana",
+      "last_name": "Smith",
+      "subjects": [
+        "Physical Education"
+      ]
+    },
+    {
+      "email": "student1@example.com",
+      "password": "password",
+      "role": "Student",
+      "first_name": "Ian",
+      "last_name": "Taylor",
+      "year": "Grade 11",
+      "parent": "parent5@example.com",
+      "subjects": [
+        {
+          "title": "Geography",
+          "teacher": "teacher1@example.com",
+          "grade": "A"
+        },
+        {
+          "title": "Science",
+          "teacher": "teacher2@example.com",
+          "grade": "D"
+        },
+        {
+          "title": "Physical Education",
+          "teacher": "teacher3@example.com",
+          "grade": "N/A"
+        }
+      ]
+    },
+    {
+      "email": "student2@example.com",
+      "password": "password",
+      "role": "Student",
+      "first_name": "Hannah",
+      "last_name": "Anderson",
+      "year": "Grade 4",
+      "parent": "parent5@example.com",
+      "subjects": [
+        {
+          "title": "Art",
+          "teacher": "teacher3@example.com",
+          "grade": "D"
+        },
+        {
+          "title": "Science",
+          "teacher": "teacher3@example.com",
+          "grade": "D"
+        },
+        {
+          "title": "Physical Education",
+          "teacher": "teacher3@example.com",
+          "grade": "N/A"
+        }
+      ]
+    },
+    {
+      "email": "student3@example.com",
+      "password": "password",
+      "role": "Student",
+      "first_name": "Charlie",
+      "last_name": "Anderson",
+      "year": "Grade 6",
+      "parent": "parent4@example.com",
+      "subjects": [
+        {
+          "title": "History",
+          "teacher": "teacher2@example.com",
+          "grade": "B"
+        },
+        {
+          "title": "Mathematics",
+          "teacher": "teacher2@example.com",
+          "grade": "C"
+        }
+      ]
+    },
+    {
+      "email": "student4@example.com",
+      "password": "password",
+      "role": "Student",
+      "first_name": "Diana",
+      "last_name": "Thomas",
+      "year": "Grade 1",
+      "parent": "parent4@example.com",
+      "subjects": [
+        {
+          "title": "English",
+          "teacher": "teacher4@example.com",
+          "grade": "A"
+        },
+        {
+          "title": "Mathematics",
+          "teacher": "teacher5@example.com",
+          "grade": "B"
+        },
+        {
+          "title": "Physical Education",
+          "teacher": "teacher3@example.com",
+          "grade": "N/A"
+        }
+      ]
+    },
+    {
+      "email": "student5@example.com",
+      "password": "password",
+      "role": "Student",
+      "first_name": "Charlie",
+      "last_name": "Thomas",
+      "year": "Grade 1",
+      "parent": "parent3@example.com",
+      "subjects": [
+        {
+          "title": "Music",
+          "teacher": "teacher5@example.com",
+          "grade": "B"
+        },
+        {
+          "title": "Art",
+          "teacher": "teacher4@example.com",
+          "grade": "A"
+        }
+      ]
+    },
+    {
+      "email": "parent1@example.com",
+      "password": "password",
+      "role": "Parent",
+      "first_name": "Julia",
+      "last_name": "Harris",
+      "children": [
+        "student5@example.com"
+      ]
+    },
+    {
+      "email": "parent2@example.com",
+      "password": "password",
+      "role": "Parent",
+      "first_name": "Julia",
+      "last_name": "Harris",
+      "children": [
+        "student10@example.com",
+        "student4@example.com"
+      ]
+    }
+  ],
+  "subjects": [
+    {
+      "title": "Mathematics",
+      "desc": "Learn about numbers, algebra, and geometry."
+    },
+    {
+      "title": "Science",
+      "desc": "Explore biology, chemistry, and physics."
+    },
+    {
+      "title": "History",
+      "desc": "Study the events of the past."
+    },
+    {
+      "title": "English",
+      "desc": "Improve reading, writing, and communication skills."
+    },
+    {
+      "title": "Geography",
+      "desc": "Understand the Earth's physical and political structure."
+    },
+    {
+      "title": "Art",
+      "desc": "Express creativity through drawing, painting, and sculpting."
+    },
+    {
+      "title": "Music",
+      "desc": "Learn musical theory and instruments."
+    },
+    {
+      "title": "Physical Education",
+      "desc": "Develop fitness and teamwork through sports."
+    }
+  ]
+}
