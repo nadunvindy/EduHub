@@ -8,7 +8,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="flex flex-col min-h-screen">
-        <GoogleTagManager gtmId="G-1GNX7VH5E3"/>
+        <GoogleTagManager gtmId="GT-WVG78R5M"/>
         <Analytics />
         <Header />
         <main className="flex-grow justify-center content-center">
