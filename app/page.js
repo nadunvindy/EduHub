@@ -23,15 +23,15 @@ export default function Page() {
     const data = await res.json();
 
     if (res.status === 200) {
-      localStorage.setItem('user', data.token); // Store the token
-      router.push(`/${JSON.parse(data.token).role.toLowerCase()}-dashboard`); // Redirect based on role
+      localStorage.setItem('user', data.token);
+      router.push(`/${JSON.parse(data.token).role.toLowerCase()}-dashboard`);
     } else {
       setError(data.message || 'Invalid email or password');
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-center justify-center">
       <div className="w-full max-w-md bg-white shadow-md rounded-lg p-6">
         <h1 className="text-2xl font-bold mb-4">Login</h1>
         <form onSubmit={handleLogin}>
@@ -58,7 +58,7 @@ export default function Page() {
           {error && <div className="text-red-500 mb-4">{error}</div>}
           <button
             type="submit"
-            className="w-full bg-primary text-white py-2 rounded-lg hover:bg-blue-600"
+            className="w-full bg-primary text-white py-2 rounded-lg hover:bg-secondary"
           >
             Login
           </button>
