@@ -1,0 +1,36 @@
+{
+    "users": [
+      {
+        "email": "principal@example.com",
+        "password": "password",
+        "role": "Principal",
+        "name": "John Principal",
+        "address": "123 School Ave"
+      },
+      {
+        "email": "teacher@example.com",
+        "password": "password",
+        "role": "Teacher",
+        "name": "Jane Teacher",
+        "subjects": ["Math", "Science"]
+      },
+      {
+        "email": "student@example.com",
+        "password": "password",
+        "role": "Student",
+        "name": "Student One",
+        "year": "Grade 5",
+        "parent": "Parent One",
+        "subjects": ["Math", "English"],
+        "grades": { "Math": "A", "English": "B" }
+      },
+      {
+        "email": "parent@example.com",
+        "password": "password",
+        "role": "Parent",
+        "name": "Parent One",
+        "children": ["student@example.com"]
+      }
+    ]
+  }
+  
