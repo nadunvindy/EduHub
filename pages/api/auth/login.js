@@ -1,22 +1,27 @@
-import fs from 'fs';
-import path from 'path';
+import { neon } from '@neondatabase/serverless';
 
-export default function handler(req, res) {
+const sql = neon('postgres://neondb_owner:Gu4eYKNOqE0y@ep-frosty-bird-a7shwlpu-pooler.ap-southeast-2.aws.neon.tech/neondb?sslmode=require');
+
+export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { email, password } = req.body;
 
-    const filePath = path.join(process.cwd(), 'public', 'data.json');
-    const fileData = fs.readFileSync(filePath, 'utf8');
-    const data = JSON.parse(fileData);
+    try {
+      // Query the database for the user with matching email and password
+      const result = await sql`SELECT * FROM users WHERE email = ${email} AND password = ${password};`;
 
-    // Find the user by email and password
-    const user = data.users.find(u => u.email === email && u.password === password);
-    if (!user) {
-      return res.status(401).json({ message: 'Invalid email or password' });
+      if (result.length === 0) {
+        return res.status(401).json({ message: 'Invalid email or password' });
+      }
+
+      const user = result[0];
+
+      // Send the full user object as the token
+      return res.status(200).json({ token: JSON.stringify(user) });
+    } catch (error) {
+      console.error('Error during login:', error);
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
-
-    // Send the full user object as the token
-    return res.status(200).json({ token: JSON.stringify(user) });
   } else {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }

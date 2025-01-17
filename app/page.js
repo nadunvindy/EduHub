@@ -1,9 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { GoogleTagManager } from '@next/third-parties/google'
-import { neon } from '@neondatabase/serverless';
-
+import { GoogleTagManager } from '@next/third-parties/google';
 
 export default function Page() {
   const [email, setEmail] = useState('');
@@ -32,12 +30,10 @@ export default function Page() {
     }
   };
 
-
   return (
-   
     <div className="flex items-center justify-center">
-        <GoogleTagManager gtmId="GTM-NQ5FRSZR" />
-        <div className="w-full max-w-md bg-white shadow-md rounded-lg p-6">
+      <GoogleTagManager gtmId="GTM-NQ5FRSZR" />
+      <div className="w-full max-w-md bg-white shadow-md rounded-lg p-6">
         <h1 className="text-2xl font-bold mb-4">Login</h1>
         <form onSubmit={handleLogin}>
           <div className="mb-4">
@@ -69,10 +65,6 @@ export default function Page() {
           </button>
         </form>
       </div>
-      <div>
-        
-      </div>
     </div>
-    
   );
 }
