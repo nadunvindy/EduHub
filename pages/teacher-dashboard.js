@@ -7,13 +7,14 @@ import { useRouter } from "next/router";
 
 export default function TeacherDashboard() {
   const [teacher, setTeacher] = useState(null);
-  const [students, setStudents] = useState([]); // All students from JSON
-  const [subjectStudents, setSubjectStudents] = useState([]); // Students for the selected subject
-  const [selectedSubject, setSelectedSubject] = useState(null); // The subject being managed
+  const [students, setStudents] = useState([]);
+  const [subjectStudents, setSubjectStudents] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState(null);
+  const [subjects, setSubjects] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchTeacherData = async () => {
       const storedUser = localStorage.getItem("user");
       if (!storedUser) {
         router.push("/"); // Redirect to login if not authenticated
@@ -28,41 +29,50 @@ export default function TeacherDashboard() {
 
       setTeacher(userData);
 
-      // Fetch all students from the API
-      const res = await fetch("/api/students");
-      const data = await res.json();
-      setStudents(data.students);
+      try {
+        const subjectResponse = await fetch(`/api/teacher/subjects?teacher_id=${userData.id}`);
+        const subjectData = await subjectResponse.json();
+        setSubjects(subjectData.subjects);
+
+        const studentResponse = await fetch("/api/students");
+        const studentData = await studentResponse.json();
+        setStudents(studentData.students);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
 
-    fetchData();
+    fetchTeacherData();
   }, [router]);
 
-  const handleSubjectSelect = async (subject) => {
-    setSelectedSubject(subject);
+  const handleSubjectSelect = async (subjectId) => {
+    setSelectedSubject(subjectId);
 
-    // Filter students enrolled in the selected subject
-    const enrolledStudents = students.filter((student) =>
-      student.subjects.some((subj) => subj.title === subject)
-    );
-    setSubjectStudents(enrolledStudents);
+    try {
+      const response = await fetch(`/api/teacher/subject-students?subject_id=${subjectId}`);
+      const data = await response.json();
+      setSubjectStudents(data.students);
+    } catch (error) {
+      console.error("Error fetching students for subject:", error);
+    }
   };
 
-  const handleEnrollStudent = async (student) => {
-    const res = await fetch("/api/enroll", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        studentEmail: student.email,
-        subject: selectedSubject,
-        teacherEmail: teacher.email,
-      }),
-    });
+  const handleEnrollStudent = async (studentId) => {
+    try {
+      const response = await fetch("/api/teacher/enroll-student", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ student_id: studentId, subject_id: selectedSubject }),
+      });
 
-    if (res.ok) {
-      alert(`${student.first_name} ${student.last_name} has been enrolled in ${selectedSubject}`);
-      handleSubjectSelect(selectedSubject); // Refresh enrolled students list
-    } else {
-      alert("Failed to enroll student");
+      if (response.ok) {
+        alert("Student enrolled successfully");
+        handleSubjectSelect(selectedSubject); // Refresh enrolled students
+      } else {
+        alert("Failed to enroll student");
+      }
+    } catch (error) {
+      console.error("Error enrolling student:", error);
     }
   };
 
@@ -89,16 +99,16 @@ export default function TeacherDashboard() {
 
         <div className="mt-5">
           <h2 className="text-2xl font-bold mb-4">Your Subjects</h2>
-          {teacher.subjects.length > 0 ? (
+          {subjects.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {teacher.subjects.map((subject, index) => (
+              {subjects.map((subject) => (
                 <div
-                  key={index}
+                  key={subject.subject_id}
                   className="bg-white p-4 border border-gray-300 rounded-lg shadow-md"
                 >
-                  <h3 className="text-xl font-bold">{subject}</h3>
+                  <h3 className="text-xl font-bold">{subject.name}</h3>
                   <button
-                    onClick={() => handleSubjectSelect(subject)}
+                    onClick={() => handleSubjectSelect(subject.subject_id)}
                     className="mt-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary"
                   >
                     Manage
@@ -113,13 +123,15 @@ export default function TeacherDashboard() {
 
         {selectedSubject && (
           <div className="mt-5">
-            <h2 className="text-2xl font-bold mb-4">Managing: {selectedSubject}</h2>
+            <h2 className="text-2xl font-bold mb-4">Managing Subject</h2>
             <div className="mb-6">
               <h3 className="text-xl font-bold mb-2">Enrolled Students</h3>
               {subjectStudents.length > 0 ? (
                 <ul>
-                  {subjectStudents.map((student, index) => (
-                    <li key={index}>{student.first_name} {student.last_name}</li>
+                  {subjectStudents.map((student) => (
+                    <li key={student.id}>
+                      {student.first_name} {student.last_name}
+                    </li>
                   ))}
                 </ul>
               ) : (
@@ -131,12 +143,15 @@ export default function TeacherDashboard() {
               <h3 className="text-xl font-bold mb-2">Enroll a Student</h3>
               <ul>
                 {students
-                  .filter((student) => !student.subjects.some((subj) => subj.title === selectedSubject))
+                  .filter(
+                    (student) =>
+                      !subjectStudents.some((enrolled) => enrolled.id === student.id)
+                  )
                   .map((student) => (
-                    <li key={student.email} className="flex items-center justify-between">
+                    <li key={student.id} className="flex items-center justify-between">
                       {student.first_name} {student.last_name}
                       <button
-                        onClick={() => handleEnrollStudent(student)}
+                        onClick={() => handleEnrollStudent(student.id)}
                         className="ml-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700"
                       >
                         Enroll
