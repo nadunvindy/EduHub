@@ -1,43 +1,22 @@
-import fs from "fs";
-import path from "path";
+import { neon } from "@neondatabase/serverless";
 
-export default function handler(req, res) {
+const sql = neon("postgres://neondb_owner:Gu4eYKNOqE0y@ep-frosty-bird-a7shwlpu-pooler.ap-southeast-2.aws.neon.tech/neondb?sslmode=require");
+
+export default async function handler(req, res) {
   if (req.method === "POST") {
-    const { first_name, last_name, email, year, parent } = req.body;
+    const { first_name, last_name, email, year, parent_id } = req.body;
 
-    if (!first_name || !last_name || !email || !year || !parent) {
+    if (!first_name || !last_name || !email || !year || !parent_id) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    const filePath = path.join(process.cwd(), "public", "data.json");
-    let data;
-
     try {
-      const fileData = fs.readFileSync(filePath, "utf8");
-      data = JSON.parse(fileData);
+      await sql`INSERT INTO Students (first_name, last_name, email, year, parent_id) VALUES (${first_name}, ${last_name}, ${email}, ${year}, ${parent_id})`;
+      res.status(201).json({ message: "Student added successfully" });
     } catch (error) {
-      data = { users: [] };
+      console.error("Error adding student:", error);
+      res.status(500).json({ message: "Failed to add student" });
     }
-
-    const existingStudent = data.users.find((user) => user.email === email);
-    if (existingStudent) {
-      return res.status(400).json({ message: "Student already exists" });
-    }
-
-    const newStudent = {
-      email,
-      role: "Student",
-      first_name,
-      last_name,
-      year,
-      parent,
-      subjects: [],
-    };
-
-    data.users.push(newStudent);
-
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf8");
-    res.status(201).json({ message: "Student added successfully", student: newStudent });
   } else {
     res.status(405).json({ message: "Method Not Allowed" });
   }

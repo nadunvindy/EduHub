@@ -1,11 +1,13 @@
-import fs from 'fs';
-import path from 'path';
+import { neon } from "@neondatabase/serverless";
 
-export default function handler(req, res) {
-  const filePath = path.join(process.cwd(), 'public', 'data.json');
-  const fileData = fs.readFileSync(filePath, 'utf8');
-  const data = JSON.parse(fileData);
+const sql = neon("postgres://neondb_owner:Gu4eYKNOqE0y@ep-frosty-bird-a7shwlpu-pooler.ap-southeast-2.aws.neon.tech/neondb?sslmode=require");
 
-  const students = data.users.filter((u) => u.role === 'Student');
-  res.status(200).json({ students });
+export default async function handler(req, res) {
+  try {
+    const students = await sql`SELECT * FROM Students`;
+    res.status(200).json({ students });
+  } catch (error) {
+    console.error("Error fetching students:", error);
+    res.status(500).json({ message: "Failed to fetch students" });
+  }
 }

@@ -82,28 +82,36 @@ export default function Teachers() {
               type="text"
               placeholder="First Name"
               value={newTeacher.first_name}
-              onChange={(e) => setNewTeacher({ ...newTeacher, first_name: e.target.value })}
+              onChange={(e) =>
+                setNewTeacher({ ...newTeacher, first_name: e.target.value })
+              }
               className="border p-2 mr-2"
             />
             <input
               type="text"
               placeholder="Last Name"
               value={newTeacher.last_name}
-              onChange={(e) => setNewTeacher({ ...newTeacher, last_name: e.target.value })}
+              onChange={(e) =>
+                setNewTeacher({ ...newTeacher, last_name: e.target.value })
+              }
               className="border p-2 mr-2"
             />
             <input
               type="email"
               placeholder="Email"
               value={newTeacher.email}
-              onChange={(e) => setNewTeacher({ ...newTeacher, email: e.target.value })}
+              onChange={(e) =>
+                setNewTeacher({ ...newTeacher, email: e.target.value })
+              }
               className="border p-2 mr-2"
             />
             <input
               type="text"
               placeholder="Subjects (comma-separated)"
               value={newTeacher.subjects}
-              onChange={(e) => setNewTeacher({ ...newTeacher, subjects: e.target.value })}
+              onChange={(e) =>
+                setNewTeacher({ ...newTeacher, subjects: e.target.value })
+              }
               className="border p-2 mr-2"
             />
             <button
@@ -119,7 +127,7 @@ export default function Teachers() {
                 key={index}
                 className="flex justify-between items-center bg-gray-100 p-4 mb-2 rounded-lg"
               >
-                {teacher.first_name} {teacher.last_name} ({teacher.email})
+                {teacher.first_name} {teacher.last_name}
                 <button
                   onClick={() => handleRemoveTeacher(teacher.email)}
                   className="bg-red-500 text-white px-4 py-2 rounded-lg"

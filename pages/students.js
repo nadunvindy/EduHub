@@ -10,7 +10,7 @@ export default function Students() {
     last_name: "",
     email: "",
     year: "",
-    parent: "",
+    parent_id: "",
   });
 
   useEffect(() => {
@@ -43,7 +43,13 @@ export default function Students() {
 
       const data = await response.json();
       setStudents((prev) => [...prev, data.student]);
-      setNewStudent({ first_name: "", last_name: "", email: "", year: "", parent: "" });
+      setNewStudent({
+        first_name: "",
+        last_name: "",
+        email: "",
+        year: "",
+        parent_id: "",
+      });
     } catch (error) {
       console.error("Error adding student:", error);
     }
@@ -80,35 +86,45 @@ export default function Students() {
               type="text"
               placeholder="First Name"
               value={newStudent.first_name}
-              onChange={(e) => setNewStudent({ ...newStudent, first_name: e.target.value })}
+              onChange={(e) =>
+                setNewStudent({ ...newStudent, first_name: e.target.value })
+              }
               className="border p-2 mr-2"
             />
             <input
               type="text"
               placeholder="Last Name"
               value={newStudent.last_name}
-              onChange={(e) => setNewStudent({ ...newStudent, last_name: e.target.value })}
+              onChange={(e) =>
+                setNewStudent({ ...newStudent, last_name: e.target.value })
+              }
               className="border p-2 mr-2"
             />
             <input
               type="email"
               placeholder="Email"
               value={newStudent.email}
-              onChange={(e) => setNewStudent({ ...newStudent, email: e.target.value })}
+              onChange={(e) =>
+                setNewStudent({ ...newStudent, email: e.target.value })
+              }
               className="border p-2 mr-2"
             />
             <input
               type="text"
               placeholder="Year"
               value={newStudent.year}
-              onChange={(e) => setNewStudent({ ...newStudent, year: e.target.value })}
+              onChange={(e) =>
+                setNewStudent({ ...newStudent, year: e.target.value })
+              }
               className="border p-2 mr-2"
             />
             <input
               type="text"
-              placeholder="Parent Email"
-              value={newStudent.parent}
-              onChange={(e) => setNewStudent({ ...newStudent, parent: e.target.value })}
+              placeholder="Parent ID"
+              value={newStudent.parent_id}
+              onChange={(e) =>
+                setNewStudent({ ...newStudent, parent_id: e.target.value })
+              }
               className="border p-2 mr-2"
             />
             <button
@@ -124,7 +140,7 @@ export default function Students() {
                 key={index}
                 className="flex justify-between items-center bg-gray-100 p-4 mb-2 rounded-lg"
               >
-                {student.first_name} {student.last_name} ({student.email})
+                {student.first_name} {student.last_name}
                 <button
                   onClick={() => handleRemoveStudent(student.email)}
                   className="bg-red-500 text-white px-4 py-2 rounded-lg"
