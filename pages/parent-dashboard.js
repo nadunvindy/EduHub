@@ -13,13 +13,13 @@ export default function ParentDashboard() {
     const fetchParentData = async () => {
       const storedUser = localStorage.getItem("user");
       if (!storedUser) {
-        router.push("/"); // Redirect to login if not authenticated
+        router.push("/"); 
         return;
       }
 
       const userData = JSON.parse(storedUser);
       if (userData.role !== "Parent") {
-        router.push("/"); // Redirect if not a parent
+        router.push("/"); 
         return;
       }
 
