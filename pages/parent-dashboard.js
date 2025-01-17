@@ -3,7 +3,6 @@ import Header from "../app/components/header";
 import Footer from "../app/components/footer";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { GoogleTagManager } from "@next/third-parties/google";
 
 export default function ParentDashboard() {
   const [parent, setParent] = useState(null);
@@ -27,15 +26,9 @@ export default function ParentDashboard() {
       setParent(userData);
 
       try {
-        const response = await fetch("/api/students");
+        const response = await fetch(`/api/parent/children?parent_id=${userData.id}`);
         const data = await response.json();
-
-        // Filter children based on parent email
-        const childrenList = data.students.filter(
-          (student) => student.parent === userData.email
-        );
-
-        setChildren(childrenList);
+        setChildren(data.children);
       } catch (error) {
         console.error("Error fetching children:", error);
       }
@@ -80,16 +73,6 @@ export default function ParentDashboard() {
                   <p className="mt-2">
                     <strong>Year:</strong> {child.year}
                   </p>
-                  <p className="mt-2">
-                    <strong>Grades:</strong>
-                  </p>
-                  <ul className="mt-2 list-disc pl-4">
-                    {child.subjects.map((subject, subIndex) => (
-                      <li key={subIndex}>
-                        {subject.title}: {subject.grade}
-                      </li>
-                    ))}
-                  </ul>
                 </div>
               ))}
             </div>
