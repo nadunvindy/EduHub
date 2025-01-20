@@ -131,7 +131,7 @@ export default function Teachers() {
                 key={teacher.id}
                 className="flex justify-between items-center bg-gray-100 p-4 mb-2 rounded-lg"
               >
-                {teacher.first_name} {teacher.last_name} - Subject ID:{" "}
+                {teacher.first_name} {teacher.last_name}
                 {teacher.subject_id}
                 <button
                   onClick={() => handleRemoveTeacher(teacher.id)}
