@@ -8,8 +8,8 @@ export default async function handler(req, res) {
 
     console.log("Received Student ID:", student_id);
 
-    if (!student_id) {
-      return res.status(400).json({ message: "Student ID is required" });
+    if (!student_id || isNaN(student_id)) {
+      return res.status(400).json({ message: "Valid Student ID is required" });
     }
 
     try {
@@ -23,18 +23,19 @@ export default async function handler(req, res) {
         return res.status(404).json({ message: "Student not found" });
       }
 
-      // Fetch subjects, grades, and their respective teacher IDs
+      // Fetch subjects, grades, and their respective teacher details
       const subjects = await sql`
         SELECT 
           ss.subject_id,
           sub.name AS subject_name,
           sub.description,
           g.grade,
-          ts.teacher_id
+          CONCAT(t.first_name, ' ', t.last_name) AS teacher_name
         FROM Student_Subject ss
         JOIN Subjects sub ON ss.subject_id = sub.subject_id
         LEFT JOIN Grades g ON ss.student_id = g.student_id AND ss.subject_id = g.subject_id
         LEFT JOIN Teacher_Subject ts ON ss.subject_id = ts.subject_id
+        LEFT JOIN Teachers t ON ts.teacher_id = t.id
         WHERE ss.student_id = ${student_id};
       `;
 

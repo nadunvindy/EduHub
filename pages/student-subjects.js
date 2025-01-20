@@ -6,6 +6,8 @@ import { useRouter } from "next/router";
 
 export default function StudentSubjects() {
   const [subjects, setSubjects] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState(null);
+  const [error, setError] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -24,40 +26,75 @@ export default function StudentSubjects() {
 
       try {
         const response = await fetch(`/api/student/subjects?student_id=${userData.id}`);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch subjects: ${response.statusText}`);
+        }
         const data = await response.json();
         setSubjects(data.subjects);
+        setSelectedSubject(data.subjects[0]); // Select the first subject by default
       } catch (error) {
-        console.error("Error fetching subjects:", error);
+        console.error("Error fetching subjects:", error.message);
+        setError("Failed to load subjects. Please try again later.");
       }
     };
 
     fetchSubjects();
   }, [router]);
 
-  if (!subjects.length)
+  if (error) {
+    return <div className="text-red-500">{error}</div>;
+  }
+
+  if (!subjects.length) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         No subjects found.
       </div>
     );
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex-grow mx-5 my-5">
-        <h1 className="text-3xl font-bold mb-6">Subjects</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {subjects.map((subject, index) => (
-            <div
-              key={index}
-              className="bg-white p-4 border border-gray-300 rounded-lg shadow-md"
-            >
-              <h2 className="text-xl font-bold">{subject.name}</h2>
-              <p className="mt-2">
-                <strong>Description:</strong> {subject.description}
+      <main className="flex-grow flex">
+        {/* Left Sidebar */}
+        <div className="w-1/4 bg-gray-100 p-6 border-r">
+          <h2 className="text-2xl font-bold mb-6">Subjects</h2>
+          <ul className="space-y-4">
+            {subjects.map((subject, index) => (
+              <li
+                key={index}
+                className={`cursor-pointer p-4 text-lg font-semibold rounded-lg text-center ${
+                  selectedSubject && selectedSubject.name === subject.name
+                    ? "bg-secondary text-white"
+                    : "hover:bg-gray-200"
+                }`}
+                onClick={() => setSelectedSubject(subject)}
+              >
+                {subject.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Right Content */}
+        <div className="flex-grow bg-white p-6">
+          {selectedSubject ? (
+            <div>
+              <h2 className="text-4xl font-bold mb-6">{selectedSubject.name}</h2>
+              <p className="text-lg mb-6">
+                <strong>Description:</strong> {selectedSubject.description}
+              </p>
+              <p className="text-7xl font-bold mb-6 text-primary">
+                <strong>Grade:</strong> {selectedSubject.grade || "Not Graded"}
+              </p>
+              <p className="text-lg">
+                <strong>Teacher:</strong> {selectedSubject.teacher_name || "N/A"}
               </p>
             </div>
-          ))}
+          ) : (
+            <div>Select a subject to view details.</div>
+          )}
         </div>
       </main>
       <Footer />
