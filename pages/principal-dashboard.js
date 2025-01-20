@@ -2,7 +2,7 @@ import "../src/globals.css";
 import Header from "../app/components/header";
 import Footer from "../app/components/footer";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function PrincipalDashboard() {
   const [principal, setPrincipal] = useState(null);
