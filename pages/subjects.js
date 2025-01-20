@@ -1,4 +1,4 @@
-import "../src/globals.css";
+import "../public/globals.css";
 import Header from "../app/components/header";
 import Footer from "../app/components/footer";
 import { useState, useEffect } from "react";
