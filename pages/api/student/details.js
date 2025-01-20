@@ -6,20 +6,41 @@ export default async function handler(req, res) {
   if (req.method === "GET") {
     const { student_id } = req.query;
 
+    console.log("Received Student ID:", student_id);
+
     if (!student_id) {
       return res.status(400).json({ message: "Student ID is required" });
     }
 
     try {
+      // Fetch student details
       const student = await sql`
-        SELECT s.id, s.first_name, s.last_name, s.year, p.first_name AS parent_name
-        FROM Students s
-        LEFT JOIN Parents p ON s.parent_id = p.id
-        WHERE s.id = ${student_id};
+        SELECT id, first_name, last_name, year
+        FROM Students
+        WHERE id = ${student_id};
       `;
-      res.status(200).json({ student: student[0] });
+      if (student.length === 0) {
+        return res.status(404).json({ message: "Student not found" });
+      }
+
+      // Fetch subjects, grades, and their respective teacher IDs
+      const subjects = await sql`
+        SELECT 
+          ss.subject_id,
+          sub.name AS subject_name,
+          sub.description,
+          g.grade,
+          ts.teacher_id
+        FROM Student_Subject ss
+        JOIN Subjects sub ON ss.subject_id = sub.subject_id
+        LEFT JOIN Grades g ON ss.student_id = g.student_id AND ss.subject_id = g.subject_id
+        LEFT JOIN Teacher_Subject ts ON ss.subject_id = ts.subject_id
+        WHERE ss.student_id = ${student_id};
+      `;
+
+      res.status(200).json({ student: student[0], subjects });
     } catch (error) {
-      console.error("Error fetching student details:", error);
+      console.error("Error fetching student details:", error.message);
       res.status(500).json({ message: "Failed to fetch student details" });
     }
   } else {

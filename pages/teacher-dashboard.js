@@ -7,10 +7,10 @@ import { useRouter } from "next/router";
 
 export default function TeacherDashboard() {
   const [teacher, setTeacher] = useState(null);
-  const [students, setStudents] = useState([]);
-  const [subjectStudents, setSubjectStudents] = useState([]);
-  const [selectedSubject, setSelectedSubject] = useState(null);
   const [subjects, setSubjects] = useState([]);
+  const [students, setStudents] = useState([]);
+  const [notices, setNotices] = useState([]);
+  const [activeTab, setActiveTab] = useState("Students"); // Tab state for navigation
   const router = useRouter();
 
   useEffect(() => {
@@ -30,13 +30,32 @@ export default function TeacherDashboard() {
       setTeacher(userData);
 
       try {
-        const subjectResponse = await fetch(`/api/teacher/subjects?teacher_id=${userData.id}`);
-        const subjectData = await subjectResponse.json();
-        setSubjects(subjectData.subjects);
+        // Fetch subjects
+        const subjectsResponse = await fetch(`/api/teacher/subjects?teacher_id=${userData.id}`);
+        if (!subjectsResponse.ok) {
+          console.error("Error fetching subjects:", subjectsResponse.status);
+        } else {
+          const subjectsData = await subjectsResponse.json();
+          setSubjects(subjectsData.subjects || []);
+        }
 
-        const studentResponse = await fetch("/api/students");
-        const studentData = await studentResponse.json();
-        setStudents(studentData.students);
+        // Fetch students
+        const studentsResponse = await fetch(`/api/teacher/students?teacher_id=${userData.id}`);
+        if (!studentsResponse.ok) {
+          console.error("Error fetching students:", studentsResponse.status);
+        } else {
+          const studentsData = await studentsResponse.json();
+          setStudents(studentsData.students || []);
+        }
+
+        // Fetch notices
+        const noticesResponse = await fetch(`/api/teacher/notices?teacher_id=${userData.id}`);
+        if (!noticesResponse.ok) {
+          console.error("Error fetching notices:", noticesResponse.status);
+        } else {
+          const noticesData = await noticesResponse.json();
+          setNotices(noticesData.notices || []);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -45,123 +64,106 @@ export default function TeacherDashboard() {
     fetchTeacherData();
   }, [router]);
 
-  const handleSubjectSelect = async (subjectId) => {
-    setSelectedSubject(subjectId);
+  const navigateToStudentDetails = (studentId) => {
+    router.push(`/student-details?student_id=${studentId}`);
+  };
 
-    try {
-      const response = await fetch(`/api/teacher/subject-students?subject_id=${subjectId}`);
-      const data = await response.json();
-      setSubjectStudents(data.students);
-    } catch (error) {
-      console.error("Error fetching students for subject:", error);
+  const navigateToNoticeDetails = (noticeId) => {
+    router.push(`/notice-details?notice_id=${noticeId}`);
+  };
+
+  const renderContent = () => {
+    if (activeTab === "Students") {
+      return (
+        <div>
+          <h2 className="text-xl font-bold mb-4">Students</h2>
+          <ul>
+            {students.length > 0 ? (
+              students.map((student) => (
+                <li key={student.id} className="mb-2 flex justify-between items-center bg-gray-100 p-4 rounded-lg">
+                  <span>{student.first_name} {student.last_name}</span>
+                  <button
+                    className="px-4 py-2 bg-primary text-white rounded-lg"
+                    onClick={() => navigateToStudentDetails(student.id)}
+                  >
+                    View Details
+                  </button>
+                </li>
+              ))
+            ) : (
+              <p>No students found.</p>
+            )}
+          </ul>
+        </div>
+      );
+    } else if (activeTab === "Notices") {
+      return (
+        <div>
+          <h2 className="text-xl font-bold mb-4">Parent Notices</h2>
+          <ul>
+            {notices.length > 0 ? (
+              notices.map((notice) => (
+                <li key={notice.id} className="mb-2 flex justify-between items-center bg-gray-100 p-4 rounded-lg">
+                  <span>{notice.message}</span>
+                  <button
+                    className="px-4 py-2 bg-primary text-white rounded-lg"
+                    onClick={() => navigateToNoticeDetails(notice.id)}
+                  >
+                    View Details
+                  </button>
+                </li>
+              ))
+            ) : (
+              <p>No notices found.</p>
+            )}
+          </ul>
+        </div>
+      );
     }
   };
 
-  const handleEnrollStudent = async (studentId) => {
-    try {
-      const response = await fetch("/api/teacher/enroll-student", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ student_id: studentId, subject_id: selectedSubject }),
-      });
-
-      if (response.ok) {
-        alert("Student enrolled successfully");
-        handleSubjectSelect(selectedSubject); // Refresh enrolled students
-      } else {
-        alert("Failed to enroll student");
-      }
-    } catch (error) {
-      console.error("Error enrolling student:", error);
-    }
-  };
-
-  if (!teacher)
+  if (!teacher) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         Loading...
       </div>
     );
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex-grow mx-5 my-5">
-        <div className="bg-white p-6 border border-primary rounded-lg shadow-md">
-          <h1 className="text-3xl font-bold mb-4">Teacher Details</h1>
-          <p>
-            <strong>Name:</strong> {teacher.first_name} {teacher.last_name}
-          </p>
-          <p>
-            <strong>Email:</strong> {teacher.email}
-          </p>
+      <main className="flex-grow flex">
+        {/* Left Sidebar */}
+        <div className="w-1/4 bg-gray-100 p-6 border-r">
+          <h2 className="text-xl font-bold mb-4">Teacher Details</h2>
+          <p><strong>Name:</strong> {teacher.first_name} {teacher.last_name}</p>
+          <p><strong>Email:</strong> {teacher.email}</p>
+          <h3 className="text-lg font-bold mt-6 mb-2">Subjects</h3>
+          <ul>
+            {subjects.map((subject) => (
+              <li key={subject.subject_id} className="mb-2">
+                {subject.name}
+              </li>
+            ))}
+          </ul>
         </div>
 
-        <div className="mt-5">
-          <h2 className="text-2xl font-bold mb-4">Your Subjects</h2>
-          {subjects.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {subjects.map((subject) => (
-                <div
-                  key={subject.subject_id}
-                  className="bg-white p-4 border border-gray-300 rounded-lg shadow-md"
-                >
-                  <h3 className="text-xl font-bold">{subject.name}</h3>
-                  <button
-                    onClick={() => handleSubjectSelect(subject.subject_id)}
-                    className="mt-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary"
-                  >
-                    Manage
-                  </button>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p>No subjects assigned.</p>
-          )}
-        </div>
-
-        {selectedSubject && (
-          <div className="mt-5">
-            <h2 className="text-2xl font-bold mb-4">Managing Subject</h2>
-            <div className="mb-6">
-              <h3 className="text-xl font-bold mb-2">Enrolled Students</h3>
-              {subjectStudents.length > 0 ? (
-                <ul>
-                  {subjectStudents.map((student) => (
-                    <li key={student.id}>
-                      {student.first_name} {student.last_name}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No students enrolled in this subject.</p>
-              )}
-            </div>
-
-            <div>
-              <h3 className="text-xl font-bold mb-2">Enroll a Student</h3>
-              <ul>
-                {students
-                  .filter(
-                    (student) =>
-                      !subjectStudents.some((enrolled) => enrolled.id === student.id)
-                  )
-                  .map((student) => (
-                    <li key={student.id} className="flex items-center justify-between">
-                      {student.first_name} {student.last_name}
-                      <button
-                        onClick={() => handleEnrollStudent(student.id)}
-                        className="ml-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700"
-                      >
-                        Enroll
-                      </button>
-                    </li>
-                  ))}
-              </ul>
-            </div>
+        {/* Right Area */}
+        <div className="flex-grow bg-white p-6">
+          <div className="flex justify-around mb-6 border-b pb-4">
+            {["Students", "Notices"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-4 py-2 ${activeTab === tab ? "font-bold border-b-2 border-primary" : ""}`}
+              >
+                {tab}
+              </button>
+            ))}
           </div>
-        )}
+          {renderContent()}
+        </div>
       </main>
       <Footer />
     </div>

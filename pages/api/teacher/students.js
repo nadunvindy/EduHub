@@ -11,16 +11,17 @@ export default async function handler(req, res) {
     }
 
     try {
-      const subjects = await sql`
-        SELECT s.subject_id, s.name, s.description
-        FROM Subjects s
-        JOIN Teacher_Subject ts ON s.subject_id = ts.subject_id
+      const students = await sql`
+        SELECT DISTINCT st.id, st.first_name, st.last_name, st.year
+        FROM Students st
+        JOIN Student_Subject ss ON st.id = ss.student_id
+        JOIN Teacher_Subject ts ON ss.subject_id = ts.subject_id
         WHERE ts.teacher_id = ${teacher_id};
       `;
-      res.status(200).json({ subjects });
+      res.status(200).json({ students });
     } catch (error) {
-      console.error("Error fetching subjects:", error);
-      res.status(500).json({ message: "Failed to fetch subjects" });
+      console.error("Error fetching students:", error);
+      res.status(500).json({ message: "Failed to fetch students" });
     }
   } else {
     res.status(405).json({ message: "Method Not Allowed" });
