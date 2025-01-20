@@ -4,10 +4,14 @@ const sql = neon("postgres://neondb_owner:Gu4eYKNOqE0y@ep-frosty-bird-a7shwlpu-p
 
 export default async function handler(req, res) {
   try {
-    const teachers = await sql`SELECT * FROM Teachers`;
+    const teachers = await sql`
+      SELECT t.id, t.first_name, t.last_name, s.name AS subject_name
+      FROM Teachers t
+      LEFT JOIN Subjects s ON t.subject_id = s.subject_id;
+    `;
     res.status(200).json({ teachers });
   } catch (error) {
-    console.error("Error fetching teachers:", error);
+    console.error("Error fetching teachers:", error.message, error.stack);
     res.status(500).json({ message: "Failed to fetch teachers" });
   }
 }

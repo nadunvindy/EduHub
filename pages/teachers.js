@@ -5,36 +5,44 @@ import { useEffect, useState } from "react";
 
 export default function Teachers() {
   const [teachers, setTeachers] = useState([]);
+  const [subjects, setSubjects] = useState([]);
   const [newTeacher, setNewTeacher] = useState({
     first_name: "",
     last_name: "",
-    email: "",
-    subjects: "",
+    subject_id: "",
   });
 
   useEffect(() => {
-    const fetchTeachers = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch("/api/teachers");
-        const data = await response.json();
-        setTeachers(data.teachers);
+        // Fetch teachers
+        const teacherResponse = await fetch("/api/teachers");
+        const teacherData = await teacherResponse.json();
+        setTeachers(teacherData.teachers);
+
+        // Fetch subjects
+        const subjectResponse = await fetch("/api/subjects");
+        const subjectData = await subjectResponse.json();
+        setSubjects(subjectData.subjects);
       } catch (error) {
-        console.error("Error fetching teachers:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
-    fetchTeachers();
+    fetchData();
   }, []);
 
   const handleAddTeacher = async () => {
+    if (!newTeacher.first_name || !newTeacher.last_name || !newTeacher.subject_id) {
+      alert("All fields are required");
+      return;
+    }
+
     try {
       const response = await fetch("/api/add-teacher", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...newTeacher,
-          subjects: newTeacher.subjects.split(",").map((s) => s.trim()),
-        }),
+        body: JSON.stringify(newTeacher),
       });
 
       if (!response.ok) {
@@ -45,18 +53,18 @@ export default function Teachers() {
 
       const data = await response.json();
       setTeachers((prev) => [...prev, data.teacher]);
-      setNewTeacher({ first_name: "", last_name: "", email: "", subjects: "" });
+      setNewTeacher({ first_name: "", last_name: "", subject_id: "" });
     } catch (error) {
       console.error("Error adding teacher:", error);
     }
   };
 
-  const handleRemoveTeacher = async (email) => {
+  const handleRemoveTeacher = async (id) => {
     try {
       const response = await fetch("/api/remove-teacher", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ id }),
       });
 
       if (!response.ok) {
@@ -65,7 +73,7 @@ export default function Teachers() {
         return;
       }
 
-      setTeachers((prev) => prev.filter((teacher) => teacher.email !== email));
+      setTeachers((prev) => prev.filter((teacher) => teacher.id !== id));
     } catch (error) {
       console.error("Error removing teacher:", error);
     }
@@ -96,24 +104,20 @@ export default function Teachers() {
               }
               className="border p-2 mr-2"
             />
-            <input
-              type="email"
-              placeholder="Email"
-              value={newTeacher.email}
+            <select
+              value={newTeacher.subject_id}
               onChange={(e) =>
-                setNewTeacher({ ...newTeacher, email: e.target.value })
+                setNewTeacher({ ...newTeacher, subject_id: e.target.value })
               }
               className="border p-2 mr-2"
-            />
-            <input
-              type="text"
-              placeholder="Subjects (comma-separated)"
-              value={newTeacher.subjects}
-              onChange={(e) =>
-                setNewTeacher({ ...newTeacher, subjects: e.target.value })
-              }
-              className="border p-2 mr-2"
-            />
+            >
+              <option value="">Select Subject</option>
+              {subjects.map((subject) => (
+                <option key={subject.subject_id} value={subject.subject_id}>
+                  {subject.name}
+                </option>
+              ))}
+            </select>
             <button
               onClick={handleAddTeacher}
               className="bg-primary text-white px-4 py-2 rounded-lg"
@@ -122,14 +126,15 @@ export default function Teachers() {
             </button>
           </div>
           <ul>
-            {teachers.map((teacher, index) => (
+            {teachers.map((teacher) => (
               <li
-                key={index}
+                key={teacher.id}
                 className="flex justify-between items-center bg-gray-100 p-4 mb-2 rounded-lg"
               >
-                {teacher.first_name} {teacher.last_name}
+                {teacher.first_name} {teacher.last_name} - Subject ID:{" "}
+                {teacher.subject_id}
                 <button
-                  onClick={() => handleRemoveTeacher(teacher.email)}
+                  onClick={() => handleRemoveTeacher(teacher.id)}
                   className="bg-red-500 text-white px-4 py-2 rounded-lg"
                 >
                   Remove
