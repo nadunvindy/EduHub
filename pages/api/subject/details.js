@@ -15,18 +15,25 @@ export default async function handler(req, res) {
     }
 
     try {
-      // Fetch the subject details, grades, and associated teachers
       const subjectDetails = await sql`
         SELECT 
           sub.subject_id,
           sub.name AS subject_name,
           sub.description,
           g.grade AS student_grade,
-          array_agg(COALESCE(CONCAT(t.first_name, ' ', t.last_name), 'No Assigned Teacher')) AS teacher_names
+          COALESCE(
+            STRING_AGG(
+              CONCAT(t.first_name, ' ', t.last_name), ', '
+            ) FILTER (WHERE t.id IS NOT NULL),
+            'No Assigned Teacher'
+          ) AS teacher_names
         FROM subjects sub
-        LEFT JOIN grades g ON g.subject_id = sub.subject_id AND g.student_id = ${student_id}
-        LEFT JOIN teacher_subject ts ON sub.subject_id = ts.subject_id
-        LEFT JOIN teachers t ON ts.teacher_id = t.id
+        LEFT JOIN grades g 
+          ON g.subject_id = sub.subject_id AND g.student_id = ${student_id}
+        LEFT JOIN teacher_subject ts 
+          ON sub.subject_id = ts.subject_id
+        LEFT JOIN teachers t 
+          ON ts.teacher_id = t.id
         WHERE sub.subject_id = ${subject_id}
         GROUP BY sub.subject_id, sub.name, sub.description, g.grade;
       `;
