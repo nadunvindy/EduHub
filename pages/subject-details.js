@@ -66,7 +66,7 @@ export default function SubjectDetails() {
         <p className="text-lg text-gray-700">
           <strong>Teachers:</strong> 
           <span className="text-lg font-medium text-gray-900 ml-2">
-            {subject.teacher_names.join(", ")}
+            {subject.teacher_names}
           </span>
         </p>
       </main>
