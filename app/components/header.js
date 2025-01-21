@@ -1,20 +1,18 @@
 import { GoogleTagManager } from "@next/third-parties/google";
 
-import Link from "next/link";
 
-export default function Header() {
+export default function Header({ onLogout }) {
   return (
     <div className="flex p-6 content-center justify-between bg-primary text-white">
       <GoogleTagManager gtmId="GTM-NQ5FRSZR" />
-
-      <h1 className="text-lg">Welcome to EduHub</h1>
+      <h1 className="self-center text-3xl">Welcome to <span className="text-secondary font-bold">EduHub</span></h1>
       <div className="self-end">
-        <Link href="/" className="text-lg px-4">
-          Home
-        </Link>
-        <Link href="/" className="text-lg px-4">
-          Login
-        </Link>
+        <button
+          onClick={onLogout}
+          className="text-lg px-4 bg-secondary text-white rounded-lg hover:bg-secondary-dark py-2"
+        >
+          Logout
+        </button>
       </div>
     </div>
   );
