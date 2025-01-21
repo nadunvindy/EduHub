@@ -30,12 +30,13 @@ export default function PrincipalDashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [studentsRes, teachersRes, parentsRes, noticesRes] = await Promise.all([
-          fetch("/api/students"),
-          fetch("/api/teachers"),
-          fetch("/api/parents"),
-          fetch("/api/notices"),
-        ]);
+        const [studentsRes, teachersRes, parentsRes, noticesRes] =
+          await Promise.all([
+            fetch("/api/students"),
+            fetch("/api/teachers"),
+            fetch("/api/parents"),
+            fetch("/api/notices"),
+          ]);
 
         const studentsData = await studentsRes.json();
         const teachersData = await teachersRes.json();
@@ -62,15 +63,24 @@ export default function PrincipalDashboard() {
           <table className="table-auto w-full border-collapse border border-gray-200">
             <thead>
               <tr>
-              
                 <th className="border px-4 py-2">Name</th>
                 <th className="border px-4 py-2">Year</th>
               </tr>
             </thead>
             <tbody>
               {students.map((student) => (
-                <tr key={student.id}>
-                  <td className="border px-4 py-2">
+                <tr
+                  key={student.id}
+                  className="cursor-pointer hover:bg-gray-100"
+                >
+                  <td
+                    className="border px-4 py-2 text-primary underline"
+                    onClick={() =>
+                      router.push(
+                        `/principal-student-details?student_id=${student.id}`
+                      )
+                    }
+                  >
                     {student.first_name} {student.last_name}
                   </td>
                   <td className="border px-4 py-2">{student.year}</td>
@@ -97,7 +107,9 @@ export default function PrincipalDashboard() {
                   <td className="border px-4 py-2">
                     {teacher.first_name} {teacher.last_name}
                   </td>
-                  <td className="border px-4 py-2">{teacher.subject_name || "N/A"}</td>
+                  <td className="border px-4 py-2">
+                    {teacher.subject_name || "N/A"}
+                  </td>
                 </tr>
               ))}
             </tbody>
