@@ -1,13 +1,16 @@
-import "../src/globals.css";
+"use client";
+
 import Header from "../app/components/header";
 import Footer from "../app/components/footer";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import "../src/globals.css";
 
 export default function StudentDashboard() {
   const [student, setStudent] = useState(null);
   const [subjects, setSubjects] = useState([]);
   const [activeTab, setActiveTab] = useState("Profile");
+  const [expandedSubject, setExpandedSubject] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -44,6 +47,10 @@ export default function StudentDashboard() {
     return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   }
 
+  const toggleAccordion = (subjectId) => {
+    setExpandedSubject((prev) => (prev === subjectId ? null : subjectId));
+  };
+
   const renderContent = () => {
     if (activeTab === "Profile") {
       return (
@@ -57,17 +64,25 @@ export default function StudentDashboard() {
       return (
         <div className="bg-white p-6 border border-primary rounded-lg shadow-md">
           <h2 className="text-2xl font-bold mb-4">Subjects</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {subjects.map((subject, index) => (
+          <div className="space-y-4">
+            {subjects.map((subject) => (
               <div
-                key={`${subject.subject_id}-${subject.teacher_name}`}
-                className="bg-gray-100 p-6 rounded-lg shadow-md hover:shadow-lg cursor-pointer"
-                onClick={() =>
-                  router.push(`/subject-details?subject_id=${subject.subject_id}&student_id=${student.id}`)
-                }
+                key={subject.subject_id}
+                className="border rounded-lg p-4 shadow-md"
               >
-                <h3 className="text-xl font-bold">{subject.subject_name}</h3>
-                <p className="text-sm">{subject.teacher_name || "No Teacher Assigned"}</p>
+                <div
+                  className="flex justify-between items-center cursor-pointer"
+                  onClick={() => toggleAccordion(subject.subject_id)}
+                >
+                  <h3 className="text-xl font-bold">{subject.subject_name}</h3>
+                  <span>{expandedSubject === subject.subject_id ? "-" : "+"}</span>
+                </div>
+                {expandedSubject === subject.subject_id && (
+                  <div className="mt-4">
+                    <p><strong>Teacher:</strong> {subject.teacher_name || "No Teacher Assigned"}</p>
+                    <p><strong>Description:</strong> {subject.description}</p>
+                  </div>
+                )}
               </div>
             ))}
           </div>
