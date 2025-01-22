@@ -409,7 +409,7 @@ export default function ExcursionNotice() {
           href="https://www.bgpa.wa.gov.au/"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-500 underline"
+          className="text-white underline border-2 border-secondary bg-secondary p-3 rounded-xl no-underline"
         >
           Grand National Park Official Website
         </a>
