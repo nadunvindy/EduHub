@@ -3,7 +3,6 @@ import Header from "../app/components/header";
 import Footer from "../app/components/footer";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import Students from "./students";
 
 export default function StudentDashboard() {
   const [student, setStudent] = useState(null);
@@ -26,16 +25,13 @@ export default function StudentDashboard() {
       }
 
       try {
-        // Fetch student details
         const studentResponse = await fetch(`/api/student/details?student_id=${userData.id}`);
         const studentData = await studentResponse.json();
         setStudent(studentData.student);
 
-        // Fetch subjects
         const subjectsResponse = await fetch(`/api/student/subjects?student_id=${userData.id}`);
         const subjectsData = await subjectsResponse.json();
         setSubjects(subjectsData.subjects);
-        console.log(subjects);
       } catch (error) {
         console.error("Error fetching data:", error.message);
       }
@@ -45,11 +41,7 @@ export default function StudentDashboard() {
   }, [router]);
 
   if (!student) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        Loading...
-      </div>
-    );
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   }
 
   const renderContent = () => {
@@ -73,8 +65,6 @@ export default function StudentDashboard() {
                 onClick={() =>
                   router.push(`/subject-details?subject_id=${subject.subject_id}&student_id=${student.id}`)
                 }
-                
-                
               >
                 <h3 className="text-xl font-bold">{subject.subject_name}</h3>
                 <p className="text-sm">{subject.teacher_name || "No Teacher Assigned"}</p>
@@ -94,6 +84,12 @@ export default function StudentDashboard() {
           <h1 className="text-xl font-bold mb-4">Student Details</h1>
           <p><strong>Name:</strong> {student.first_name} {student.last_name}</p>
           <p><strong>Year:</strong> {student.year}</p>
+          <button
+            onClick={() => router.push("/excursion-notice")}
+            className="mt-4 bg-tertiary text-white px-4 py-2 rounded-lg hover:bg-primary"
+          >
+            View Excursion Notice
+          </button>
         </div>
         <div className="flex-grow bg-white p-6">
           <div className="flex justify-around mb-6 border-b pb-4">

@@ -48,10 +48,14 @@ export default function ParentDashboard() {
                 key={child.id}
                 className="mb-2 bg-gray-100 p-4 rounded-lg shadow-md flex justify-between items-center"
               >
-                <span>{child.first_name} {child.last_name} (Year: {child.year})</span>
+                <span>
+                  {child.first_name} {child.last_name} (Year: {child.year})
+                </span>
                 <button
                   onClick={() => {
-                    console.log(`Navigating to child details for student_id: ${child.id}`); // Debug log
+                    console.log(
+                      `Navigating to child details for student_id: ${child.id}`
+                    ); // Debug log
                     router.push(`/child-details?student_id=${child.id}`);
                   }}
                   className="bg-primary text-white px-4 py-2 rounded-lg"
@@ -105,6 +109,12 @@ export default function ParentDashboard() {
               <p>
                 <strong>Email:</strong> {parent.email}
               </p>
+              <button
+                onClick={() => router.push("/excursion-form")}
+                className="mt-4 bg-tertiary text-white px-4 py-2 rounded-lg hover:bg-primary"
+              >
+                Upcoming Excursion Form
+              </button>
             </>
           ) : (
             <div>Loading...</div>
@@ -118,7 +128,9 @@ export default function ParentDashboard() {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-4 py-2 ${activeTab === tab ? "font-bold border-b-2 border-primary" : ""}`}
+                className={`px-4 py-2 ${
+                  activeTab === tab ? "font-bold border-b-2 border-primary" : ""
+                }`}
               >
                 {tab}
               </button>
