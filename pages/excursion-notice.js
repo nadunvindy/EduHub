@@ -410,6 +410,7 @@ export default function ExcursionNotice() {
           target="_blank"
           rel="noopener noreferrer"
           className="text-white underline border-2 border-secondary bg-secondary p-3 rounded-xl no-underline"
+          onClick={()=> clarity('set',"external_link","Grand National Park")}
         >
           Grand National Park Official Website
         </a>
