@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Header from "../app/components/header";
 import Footer from "../app/components/footer";
+import "../src/globals.css"
 
 export default function NoticeDetails() {
   const [notice, setNotice] = useState(null);
