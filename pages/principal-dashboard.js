@@ -11,6 +11,7 @@ export default function PrincipalDashboard() {
   const [teachers, setTeachers] = useState([]);
   const [parents, setParents] = useState([]);
   const [notices, setNotices] = useState([]);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   const router = useRouter();
 
   useEffect(() => {
@@ -55,20 +56,50 @@ export default function PrincipalDashboard() {
     fetchData();
   }, []);
 
+  const handleSort = (key) => {
+    setSortConfig((prev) => {
+      const direction =
+        prev.key === key && prev.direction === "asc" ? "desc" : "asc";
+      return { key, direction };
+    });
+  };
+
+  const getSortedData = (data) => {
+    if (!sortConfig.key) return data;
+    return [...data].sort((a, b) => {
+      const aValue = a[sortConfig.key]?.toString().toLowerCase() || "";
+      const bValue = b[sortConfig.key]?.toString().toLowerCase() || "";
+      if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
+      if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
+      return 0;
+    });
+  };
+
   const renderContent = () => {
     if (activeTab === "Students") {
+      const sortedStudents = getSortedData(students);
       return (
         <div>
           <h2 className="text-2xl font-bold mb-4">Students</h2>
           <table className="table-auto w-full border-collapse border border-gray-200">
             <thead>
               <tr>
-                <th className="border px-4 py-2">Name</th>
-                <th className="border px-4 py-2">Year</th>
+                <th
+                  className="border px-4 py-2 cursor-pointer"
+                  onClick={() => handleSort("first_name")}
+                >
+                  Name {sortConfig.key === "first_name" ? "▲" : "▼"}
+                </th>
+                <th
+                  className="border px-4 py-2 cursor-pointer"
+                  onClick={() => handleSort("year")}
+                >
+                  Year {sortConfig.key === "year" ? "▲" : "▼"}
+                </th>
               </tr>
             </thead>
             <tbody>
-              {students.map((student) => (
+              {sortedStudents.map((student) => (
                 <tr
                   key={student.id}
                   className="cursor-pointer hover:bg-gray-100"
@@ -91,18 +122,29 @@ export default function PrincipalDashboard() {
         </div>
       );
     } else if (activeTab === "Teachers") {
+      const sortedTeachers = getSortedData(teachers);
       return (
         <div>
           <h2 className="text-2xl font-bold mb-4">Teachers</h2>
           <table className="table-auto w-full border-collapse border border-gray-200">
             <thead>
               <tr>
-                <th className="border px-4 py-2">Name</th>
-                <th className="border px-4 py-2">Subject</th>
+                <th
+                  className="border px-4 py-2 cursor-pointer"
+                  onClick={() => handleSort("first_name")}
+                >
+                  Name {sortConfig.key === "first_name" ? "▲" : "▼"}
+                </th>
+                <th
+                  className="border px-4 py-2 cursor-pointer"
+                  onClick={() => handleSort("subject_name")}
+                >
+                  Subject {sortConfig.key === "subject_name" ? "▲" : "▼"}
+                </th>
               </tr>
             </thead>
             <tbody>
-              {teachers.map((teacher) => (
+              {sortedTeachers.map((teacher) => (
                 <tr key={teacher.id}>
                   <td className="border px-4 py-2">
                     {teacher.first_name} {teacher.last_name}
@@ -117,17 +159,23 @@ export default function PrincipalDashboard() {
         </div>
       );
     } else if (activeTab === "Parents") {
+      const sortedParents = getSortedData(parents);
       return (
         <div>
           <h2 className="text-2xl font-bold mb-4">Parents</h2>
           <table className="table-auto w-full border-collapse border border-gray-200">
             <thead>
               <tr>
-                <th className="border px-4 py-2">Name</th>
+                <th
+                  className="border px-4 py-2 cursor-pointer"
+                  onClick={() => handleSort("first_name")}
+                >
+                  Name {sortConfig.key === "first_name" ? "▲" : "▼"}
+                </th>
               </tr>
             </thead>
             <tbody>
-              {parents.map((parent) => (
+              {sortedParents.map((parent) => (
                 <tr key={parent.id}>
                   <td className="border px-4 py-2">
                     {parent.first_name} {parent.last_name}
@@ -139,21 +187,42 @@ export default function PrincipalDashboard() {
         </div>
       );
     } else if (activeTab === "Notices") {
+      const sortedNotices = getSortedData(notices);
       return (
         <div>
           <h2 className="text-2xl font-bold mb-4">Notices</h2>
           <table className="table-auto w-full border-collapse border border-gray-200">
             <thead>
               <tr>
-                <th className="border px-4 py-2">Parent</th>
-                <th className="border px-4 py-2">Student</th>
-                <th className="border px-4 py-2">Subject</th>
-                <th className="border px-4 py-2">Teacher</th>
+                <th
+                  className="border px-4 py-2 cursor-pointer"
+                  onClick={() => handleSort("parent_name")}
+                >
+                  Parent {sortConfig.key === "parent_name" ? "▲" : "▼"}
+                </th>
+                <th
+                  className="border px-4 py-2 cursor-pointer"
+                  onClick={() => handleSort("student_name")}
+                >
+                  Student {sortConfig.key === "student_name" ? "▲" : "▼"}
+                </th>
+                <th
+                  className="border px-4 py-2 cursor-pointer"
+                  onClick={() => handleSort("subject_name")}
+                >
+                  Subject {sortConfig.key === "subject_name" ? "▲" : "▼"}
+                </th>
+                <th
+                  className="border px-4 py-2 cursor-pointer"
+                  onClick={() => handleSort("teacher_name")}
+                >
+                  Teacher {sortConfig.key === "teacher_name" ? "▲" : "▼"}
+                </th>
                 <th className="border px-4 py-2">Message</th>
               </tr>
             </thead>
             <tbody>
-              {notices.map((notice) => (
+              {sortedNotices.map((notice) => (
                 <tr key={notice.id}>
                   <td className="border px-4 py-2">{notice.parent_name}</td>
                   <td className="border px-4 py-2">{notice.student_name}</td>
@@ -170,11 +239,7 @@ export default function PrincipalDashboard() {
   };
 
   if (!principal) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        Loading...
-      </div>
-    );
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   }
 
   return (
@@ -182,7 +247,7 @@ export default function PrincipalDashboard() {
       <Header />
       <main className="flex-grow flex">
         <div className="w-1/4 bg-gray-100 p-6 border-r border-gray-300">
-          <h1 className="text-xl font-bold mb-4">Principal Details</h1>
+        <h1 className="text-xl font-bold mb-4">Principal Details</h1>
           <p>
             <strong>Name:</strong> {principal.first_name} {principal.last_name}
           </p>
