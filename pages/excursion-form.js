@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Header from "../app/components/header";
 import Footer from "../app/components/footer";
 import "../src/globals.css";
+import { clarity } from 'react-microsoft-clarity';
 
 export default function ExcursionForm() {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -12,6 +13,13 @@ export default function ExcursionForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent actual form submission
+
+    // Retrieve the value of the selected agreement option
+    const agreementValue = e.target.elements.agreement.value;
+
+    // Set a custom tag in Clarity based on the user's agreement choice
+    clarity.set('agreement', agreementValue);
+
     setIsSubmitted(true); // Show success message
   };
 
@@ -21,15 +29,17 @@ export default function ExcursionForm() {
         <Header />
         <main className="flex-grow p-6 bg-gray-50 flex items-center justify-center">
           <div className="text-center bg-white p-8 rounded-lg shadow-md">
-            <h1 className="text-4xl font-bold mb-4 text-green-600">Form Submitted Successfully!</h1>
+            <h1 className="text-4xl font-bold mb-4 text-green-600">
+              Form Submitted Successfully!
+            </h1>
             <p className="text-lg mb-6">
               Thank you for signing the excursion form. We’ll get back to you with more details soon.
             </p>
             <button
-              onClick={() => router.push("/parent-dashboard")} // Redirect to Teacher Dashboard
+              onClick={() => router.push("/parent-dashboard")}
               className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary"
             >
-              Back to Teacher Dashboard
+              Back to Parent Dashboard
             </button>
           </div>
         </main>
@@ -46,11 +56,21 @@ export default function ExcursionForm() {
         <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md space-y-4">
           <div>
             <label className="block text-lg font-medium mb-2">Name:</label>
-            <input type="text" className="w-full border px-4 py-2 rounded-lg" placeholder="Enter your name" required />
+            <input
+              type="text"
+              className="w-full border px-4 py-2 rounded-lg"
+              placeholder="Enter your name"
+              required
+            />
           </div>
           <div>
             <label className="block text-lg font-medium mb-2">Email:</label>
-            <input type="email" className="w-full border px-4 py-2 rounded-lg" placeholder="Enter your email" required />
+            <input
+              type="email"
+              className="w-full border px-4 py-2 rounded-lg"
+              placeholder="Enter your email"
+              required
+            />
           </div>
           <div>
             <label className="block text-lg font-medium mb-2">Preferred Excursion Date:</label>
@@ -78,16 +98,30 @@ export default function ExcursionForm() {
           </div>
           <div className="flex items-center space-x-4">
             <label>
-              <input type="radio" name="agreement" value="yes" className="mr-2" required />
+              <input
+                type="radio"
+                name="agreement"
+                value="yes"
+                className="mr-2"
+                required
+              />
               Yes, I agree
             </label>
             <label>
-              <input type="radio" name="agreement" value="no" className="mr-2" />
+              <input
+                type="radio"
+                name="agreement"
+                value="no"
+                className="mr-2"
+              />
               No, I disagree
             </label>
           </div>
           <div>
-            <button type="submit" className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary">
+            <button
+              type="submit"
+              className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary"
+            >
               Submit
             </button>
           </div>
