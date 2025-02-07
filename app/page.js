@@ -24,6 +24,13 @@ export default function Page() {
 
     if (res.status === 200) {
       localStorage.setItem('user', data.token);
+
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'userLogin',
+        user_email: JSON.parse(data.token).email, // Extract email from token
+      });
+
       router.push(`/${JSON.parse(data.token).role.toLowerCase()}-dashboard`);
     } else {
       setError(data.message || 'Invalid email or password');
