@@ -11,7 +11,6 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <script>window.clarity("identify", "{{ email }}")</script>
       <body className="flex flex-col min-h-screen">
         <GoogleAnalytics
           gaId="G-1GNX7VH5E3
