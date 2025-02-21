@@ -25,9 +25,13 @@ export default function Page() {
     if (res.status === 200) {
       const user = JSON.parse(data.token); // Parse token once
       const userRole = user.role.toLowerCase(); // Extract role
+      const userEmail = user.email;
+      const userId = user.id;
 
       localStorage.setItem("user", data.token);
       sessionStorage.setItem("userRole", userRole); // Store user role for tracking
+      sessionStorage.setItem("userId", userId);
+      sessionStorage.setItem("userEmail", userEmail);
 
       // Send event to Google Tag Manager
       window.dataLayer = window.dataLayer || [];
@@ -36,6 +40,8 @@ export default function Page() {
         user_email: user.email,
         user_role: userRole,
       });
+
+      window.clarity("identify");
 
       if (typeof clarity !== "undefined") {
         clarity("set", "UserRole", userRole);
