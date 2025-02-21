@@ -405,15 +405,28 @@ export default function ExcursionNotice() {
         </p>
 
         <h2 className="text-2xl font-bold mb-4">Learn More</h2>
-        <a
-          href="https://www.bgpa.wa.gov.au/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-white border-2 border-secondary bg-secondary p-3 rounded-xl no-underline"
-          onClick={()=> clarity('set',"external_link","Grand National Park")}
-        >
-          Grand National Park Official Website
-        </a>
+        <div className="flex flex-col w-2/5 gap-3">
+          <a
+            href="https://www.bgpa.wa.gov.au/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white border-2 border-secondary bg-secondary p-3 rounded-xl no-underline"
+            onClick={() =>
+              clarity("set", "external_link", "Grand National Park")
+            }
+          >
+            Grand National Park Official Website
+          </a>
+          <a
+            href="https://exploreparks.dbca.wa.gov.au/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white border-2 border-secondary bg-secondary p-3 rounded-xl no-underline"
+            onClick={() => clarity("set", "external_link", "WA Parks")}
+          >
+            WA Parks
+          </a>
+        </div>
       </main>
       <Footer />
     </div>
