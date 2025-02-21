@@ -33,6 +33,7 @@ export default function Page() {
       sessionStorage.setItem("userId", userId);
       sessionStorage.setItem("userEmail", userEmail);
 
+      window.clarity("identify", userEmail);
       // Send event to Google Tag Manager
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
