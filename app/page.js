@@ -33,18 +33,16 @@ export default function Page() {
       sessionStorage.setItem("userId", userId);
       sessionStorage.setItem("userEmail", userEmail);
 
-      window.clarity("identify", userEmail);
       // Send event to Google Tag Manager
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
         event: "userLogin",
-        user_email: JSON.parse(data.token).email, // Extract email from token
+        user_email: userEmail, // Extract email from token
       });
-
-      window.clarity("identify");
 
       if (typeof clarity !== "undefined") {
         clarity("set", "UserRole", userRole);
+        window.clarity("identify", userEmail);
       }
 
       // Redirect to dashboard based on role
