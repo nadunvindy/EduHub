@@ -38,14 +38,14 @@ export default function Page() {
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
         event: "userLogin",
-        user_email: user.email,
-        user_role: userRole,
+        user_email: JSON.parse(data.token).email, // Extract email from token
       });
 
       window.clarity("identify");
 
       if (typeof clarity !== "undefined") {
         clarity("set", "UserRole", userRole);
+        c;
       }
 
       // Redirect to dashboard based on role
