@@ -1,21 +1,21 @@
-'use client';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { GoogleTagManager } from '@next/third-parties/google';
+"use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { GoogleTagManager } from "@next/third-parties/google";
 
 export default function Page() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ email, password }),
     });
@@ -23,17 +23,28 @@ export default function Page() {
     const data = await res.json();
 
     if (res.status === 200) {
-      localStorage.setItem('user', data.token);
+      const user = JSON.parse(data.token); // Parse token once
+      const userRole = user.role.toLowerCase(); // Extract role
 
+      localStorage.setItem("user", data.token);
+      sessionStorage.setItem("userRole", userRole); // Store user role for tracking
+
+      // Send event to Google Tag Manager
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
-        event: 'userLogin',
-        user_email: JSON.parse(data.token).email, // Extract email from token
+        event: "userLogin",
+        user_email: user.email,
+        user_role: userRole,
       });
 
-      router.push(`/${JSON.parse(data.token).role.toLowerCase()}-dashboard`);
+      if (typeof clarity !== "undefined") {
+        clarity("set", "UserRole", userRole);
+      }
+
+      // Redirect to dashboard based on role
+      router.push(`/${userRole}-dashboard`);
     } else {
-      setError(data.message || 'Invalid email or password');
+      setError(data.message || "Invalid email or password");
     }
   };
 
