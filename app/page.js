@@ -45,7 +45,6 @@ export default function Page() {
 
       if (typeof clarity !== "undefined") {
         clarity("set", "UserRole", userRole);
-        c;
       }
 
       // Redirect to dashboard based on role
