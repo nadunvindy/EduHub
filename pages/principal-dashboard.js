@@ -78,20 +78,30 @@ export default function PrincipalDashboard() {
 
   const renderCarousel = () => {
     if (!notices.length) {
-      return <p className="mt-6 text-sm text-gray-500">No notices available.</p>;
+      return (
+        <p className="mt-6 text-sm text-gray-500">No notices available.</p>
+      );
     }
 
     const currentNotice = notices[carouselIndex];
 
     return (
       <div className="mt-6 bg-secondary text-white p-6 rounded-lg shadow-md space-y-4">
-        <h3 className="text-xl font-bold">{currentNotice.student_name || "Notice"}</h3>
-        <p className="text-sm italic">{currentNotice.message || "No message available."}</p>
-        <p className="text-xs">Date: {new Date(currentNotice.created_at).toLocaleDateString()}</p>
+        <h3 className="text-xl font-bold">
+          {currentNotice.student_name || "Notice"}
+        </h3>
+        <p className="text-sm italic">
+          {currentNotice.message || "No message available."}
+        </p>
+        <p className="text-xs">
+          Date: {new Date(currentNotice.created_at).toLocaleDateString()}
+        </p>
         <div className="flex justify-between mt-4">
           <button
             onClick={() =>
-              setCarouselIndex((prev) => (prev === 0 ? notices.length - 1 : prev - 1))
+              setCarouselIndex((prev) =>
+                prev === 0 ? notices.length - 1 : prev - 1
+              )
             }
             className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary"
           >
@@ -99,7 +109,9 @@ export default function PrincipalDashboard() {
           </button>
           <button
             onClick={() =>
-              setCarouselIndex((prev) => (prev === notices.length - 1 ? 0 : prev + 1))
+              setCarouselIndex((prev) =>
+                prev === notices.length - 1 ? 0 : prev + 1
+              )
             }
             className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary"
           >
@@ -221,11 +233,15 @@ export default function PrincipalDashboard() {
           </table>
         </div>
       );
-    } 
+    }
   };
 
   if (!principal) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        Loading...
+      </div>
+    );
   }
 
   return (
@@ -235,10 +251,12 @@ export default function PrincipalDashboard() {
         <div className="w-1/4 bg-gray-100 p-6 border-r border-gray-300">
           <h1 className="text-xl font-bold mb-4">Principal Details</h1>
           <p>
-            <strong>Name:</strong> {principal.first_name} {principal.last_name}
+            <strong data-clarity-unmask="false">Name:</strong>{" "}
+            {principal.first_name} {principal.last_name}
           </p>
           <p>
-            <strong>Email:</strong> {principal.email}
+            <strong data-clarity-unmask="false">Email:</strong>{" "}
+            {principal.email}
           </p>
           <p className="mt-4">Welcome, Principal {principal.last_name}!</p>
           <div className="mt-6">
