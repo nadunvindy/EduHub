@@ -45,6 +45,8 @@ export default function Page() {
         // window.clarity("identify", userEmail);
       }
 
+      clarity.identify(userId, { role: userRole, email: userEmail }); //Test code to identify userRole and userEmail.
+
       // Redirect to dashboard based on role
       router.push(`/${userRole}-dashboard`);
     } else {
