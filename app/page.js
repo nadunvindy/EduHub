@@ -42,7 +42,7 @@ export default function Page() {
 
       if (typeof clarity !== "undefined") {
         clarity("set", "UserRole", userRole);
-        // window.clarity("identify", userEmail);
+        window.clarity("identify", userEmail);
       }
 
       clarity.identify(userId, { role: userRole, email: userEmail }); //Test code to identify userRole and userEmail.
