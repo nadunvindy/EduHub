@@ -18,7 +18,7 @@ export default function ExcursionForm() {
     const agreementValue = e.target.elements.agreement.value;
 
     // Set a custom tag in Clarity based on the user's agreement choice
-    clarity.set("agreement", agreementValue);
+    clarity("set", "excursionagreement", agreementValue);
 
     setIsSubmitted(true); // Show success message
   };
