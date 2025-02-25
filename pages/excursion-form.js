@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Header from "../app/components/header";
 import Footer from "../app/components/footer";
 import "../src/globals.css";
-import { clarity } from 'react-microsoft-clarity';
+import { clarity } from "react-microsoft-clarity";
 
 export default function ExcursionForm() {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -18,7 +18,7 @@ export default function ExcursionForm() {
     const agreementValue = e.target.elements.agreement.value;
 
     // Set a custom tag in Clarity based on the user's agreement choice
-    clarity.set('agreement', agreementValue);
+    clarity.set("agreement", agreementValue);
 
     setIsSubmitted(true); // Show success message
   };
@@ -33,7 +33,8 @@ export default function ExcursionForm() {
               Form Submitted Successfully!
             </h1>
             <p className="text-lg mb-6">
-              Thank you for signing the excursion form. We’ll get back to you with more details soon.
+              Thank you for signing the excursion form. We’ll get back to you
+              with more details soon.
             </p>
             <button
               onClick={() => router.push("/parent-dashboard")}
@@ -53,7 +54,10 @@ export default function ExcursionForm() {
       <Header />
       <main className="flex-grow p-6 bg-gray-50">
         <h1 className="text-4xl font-bold mb-6">Upcoming Excursion Form</h1>
-        <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md space-y-4">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white p-6 rounded-lg shadow-md space-y-4"
+        >
           <div>
             <label className="block text-lg font-medium mb-2">Name:</label>
             <input
@@ -73,11 +77,19 @@ export default function ExcursionForm() {
             />
           </div>
           <div>
-            <label className="block text-lg font-medium mb-2">Preferred Excursion Date:</label>
-            <input type="date" className="w-full border px-4 py-2 rounded-lg" required />
+            <label className="block text-lg font-medium mb-2">
+              Preferred Excursion Date:
+            </label>
+            <input
+              type="date"
+              className="w-full border px-4 py-2 rounded-lg"
+              required
+            />
           </div>
           <div>
-            <label className="block text-lg font-medium mb-2">Select Your Child:</label>
+            <label className="block text-lg font-medium mb-2">
+              Select Your Child:
+            </label>
             <select className="w-full border px-4 py-2 rounded-lg" required>
               <option value="">-- Select --</option>
               <option value="1">John Doe</option>
@@ -93,7 +105,9 @@ export default function ExcursionForm() {
             ></textarea>
           </div>
           <div>
-            <label className="block text-lg font-medium mb-2">Upload Supporting Document:</label>
+            <label className="block text-lg font-medium mb-2">
+              Upload Supporting Document:
+            </label>
             <input type="file" className="w-full" />
           </div>
           <div className="flex items-center space-x-4">
@@ -121,6 +135,9 @@ export default function ExcursionForm() {
             <button
               type="submit"
               className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary"
+              onClick={() => {
+                window.clarity("event", "Excursion Form Submit");
+              }}
             >
               Submit
             </button>
