@@ -14,11 +14,11 @@ export default function ExcursionForm() {
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent actual form submission
 
-    // Retrieve the value of the selected agreement option
     const agreementValue = e.target.elements.agreement.value;
 
-    // Set a custom tag in Clarity based on the user's agreement choice
-    clarity("set", "excursionagreement", agreementValue);
+    let agreementString = agreementValue.toString();
+
+    clarity("set", "excursionagreement", agreementString);
 
     setIsSubmitted(true); // Show success message
   };
