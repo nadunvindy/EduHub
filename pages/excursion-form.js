@@ -18,7 +18,7 @@ export default function ExcursionForm() {
 
     let agreementString = agreementValue.toString();
 
-    clarity("set", "excursionagreement", agreementString);
+    window.clarity("set", "excursionagreement", agreementString);
 
     setIsSubmitted(true); // Show success message
   };
