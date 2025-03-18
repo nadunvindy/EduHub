@@ -12,10 +12,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="flex flex-col min-h-screen">
-        <GoogleAnalytics
-          gaId="G-1GNX7VH5E3
-"
-        />
         <GoogleTagManager gtmId="GTM-NQ5FRSZR" />
         <Analytics />
         <SpeedInsights />
