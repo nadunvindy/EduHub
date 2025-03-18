@@ -11,7 +11,6 @@ export default function Header() {
 
   return (
     <div className="flex p-6 content-center justify-between bg-primary text-white">
-      <GoogleTagManager gtmId="GTM-NQ5FRSZR" />
       <h1 className="self-center text-3xl">
         Welcome to <span className="text-secondary font-bold">EduHub</span>
       </h1>
