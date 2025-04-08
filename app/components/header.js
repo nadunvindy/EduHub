@@ -1,5 +1,7 @@
 import { GoogleTagManager } from "@next/third-parties/google";
 import { useRouter } from "next/navigation";
+import "../../src/cookieconsent.css"
+
 
 export default function Header() {
   const router = useRouter();
